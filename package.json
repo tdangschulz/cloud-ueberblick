@@ -1,0 +1,12 @@
+{
+  "name": "docker-beispiel-projekt",
+  "version": "1.0.0",
+  "description": "Kleine Node.js-App zum Erklären von Docker-Grundlagen in der Cloud-Schulung",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
