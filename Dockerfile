@@ -13,7 +13,7 @@
 # schlanke Linux-Distribution (~5 MB statt ~900 MB bei "node:20").
 # GUTER GESPRÄCHSPUNKT: Warum ist ein kleineres Image besser?
 # (schnellere Downloads, kleinere Angriffsfläche, schnelleres Deployment)
-FROM node:20-alpine
+FROM node:24-alpine
 
 
 # ------------------------------------------------------------
