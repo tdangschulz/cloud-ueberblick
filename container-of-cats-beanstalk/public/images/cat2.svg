@@ -1,0 +1,33 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#ffe8b8"/>
+  <!-- Pizza im Hintergrund -->
+  <circle cx="200" cy="210" r="150" fill="#f5c451" opacity="0.5"/>
+  <!-- Katzenkörper -->
+  <ellipse cx="200" cy="280" rx="95" ry="75" fill="#7a7a7a"/>
+  <!-- Ohren -->
+  <polygon points="140,190 120,120 180,170" fill="#7a7a7a"/>
+  <polygon points="260,190 280,120 220,170" fill="#7a7a7a"/>
+  <polygon points="140,185 132,142 163,168" fill="#ffb3c1"/>
+  <polygon points="260,185 268,142 237,168" fill="#ffb3c1"/>
+  <!-- Streifen -->
+  <path d="M160,150 Q200,140 240,150" stroke="#555" stroke-width="6" fill="none"/>
+  <path d="M155,175 Q200,165 245,175" stroke="#555" stroke-width="6" fill="none"/>
+  <!-- Kopf -->
+  <circle cx="200" cy="210" r="72" fill="#7a7a7a"/>
+  <!-- Augen (glücklich, geschlossen vor Genuss) -->
+  <path d="M165,205 Q175,195 185,205" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M215,205 Q225,195 235,205" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Nase -->
+  <polygon points="200,222 192,232 208,232" fill="#3a3a3a"/>
+  <!-- Mund offen (isst Pizza) -->
+  <ellipse cx="200" cy="245" rx="18" ry="12" fill="#3a1a1a"/>
+  <!-- Schnurrhaare -->
+  <line x1="128" y1="220" x2="55" y2="212" stroke="#333" stroke-width="2"/>
+  <line x1="128" y1="232" x2="55" y2="238" stroke="#333" stroke-width="2"/>
+  <line x1="272" y1="220" x2="345" y2="212" stroke="#333" stroke-width="2"/>
+  <line x1="272" y1="232" x2="345" y2="238" stroke="#333" stroke-width="2"/>
+  <!-- Pizzastück im Mund -->
+  <polygon points="200,238 240,220 235,255" fill="#e8a33d" stroke="#c9812a" stroke-width="2"/>
+  <circle cx="215" cy="235" r="4" fill="#c0392b"/>
+  <circle cx="225" cy="245" r="4" fill="#c0392b"/>
+</svg>

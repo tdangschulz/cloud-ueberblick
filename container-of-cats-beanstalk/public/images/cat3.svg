@@ -1,0 +1,36 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#dfe9f3"/>
+  <!-- Schreibtisch -->
+  <rect x="0" y="320" width="400" height="80" fill="#8b5a2b"/>
+  <!-- Katzenkörper im Anzug -->
+  <ellipse cx="200" cy="290" rx="95" ry="80" fill="#2c3e50"/>
+  <polygon points="160,260 200,300 240,260 240,340 160,340" fill="white"/>
+  <polygon points="195,270 200,300 205,270" fill="#c0392b"/>
+  <!-- Ohren -->
+  <polygon points="140,185 120,115 180,165" fill="#e8b982"/>
+  <polygon points="260,185 280,115 220,165" fill="#e8b982"/>
+  <polygon points="140,180 132,137 163,163" fill="#ffcf9e"/>
+  <polygon points="260,180 268,137 237,163" fill="#ffcf9e"/>
+  <!-- Kopf -->
+  <circle cx="200" cy="205" r="72" fill="#e8b982"/>
+  <!-- Brille -->
+  <circle cx="175" cy="205" r="18" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+  <circle cx="225" cy="205" r="18" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+  <line x1="193" y1="205" x2="207" y2="205" stroke="#1a1a1a" stroke-width="4"/>
+  <!-- Augen -->
+  <circle cx="175" cy="205" r="6" fill="#1a1a1a"/>
+  <circle cx="225" cy="205" r="6" fill="#1a1a1a"/>
+  <!-- Nase -->
+  <polygon points="200,222 192,232 208,232" fill="#7a4a2b"/>
+  <!-- Selbstbewusstes Lächeln -->
+  <path d="M180,240 Q200,255 220,240" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Schnurrhaare -->
+  <line x1="128" y1="220" x2="55" y2="212" stroke="#333" stroke-width="2"/>
+  <line x1="128" y1="232" x2="55" y2="238" stroke="#333" stroke-width="2"/>
+  <line x1="272" y1="220" x2="345" y2="212" stroke="#333" stroke-width="2"/>
+  <line x1="272" y1="232" x2="345" y2="238" stroke="#333" stroke-width="2"/>
+  <!-- Laptop auf dem Tisch -->
+  <rect x="140" y="330" width="60" height="8" fill="#333"/>
+  <polygon points="140,330 145,300 195,300 200,330" fill="#555"/>
+  <rect x="148" y="304" width="42" height="22" fill="#4ea1e0"/>
+</svg>

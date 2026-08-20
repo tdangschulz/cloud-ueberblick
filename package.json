@@ -4,9 +4,14 @@
   "description": "Kleine Node.js-App zum Erklären von Docker-Grundlagen in der Cloud-Schulung",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

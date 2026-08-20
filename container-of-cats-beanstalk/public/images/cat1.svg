@@ -1,0 +1,36 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#1a1a2e"/>
+  <circle cx="80" cy="60" r="2" fill="white"/>
+  <circle cx="320" cy="90" r="3" fill="white"/>
+  <circle cx="350" cy="40" r="2" fill="white"/>
+  <circle cx="50" cy="200" r="2" fill="white"/>
+  <circle cx="360" cy="250" r="2" fill="white"/>
+  <circle cx="30" cy="320" r="3" fill="white"/>
+  <!-- Katzenkörper -->
+  <ellipse cx="200" cy="260" rx="90" ry="80" fill="#f2a154"/>
+  <!-- Ohren -->
+  <polygon points="140,180 120,110 180,160" fill="#f2a154"/>
+  <polygon points="260,180 280,110 220,160" fill="#f2a154"/>
+  <polygon points="140,175 130,130 165,158" fill="#ffcf9e"/>
+  <polygon points="260,175 270,130 235,158" fill="#ffcf9e"/>
+  <!-- Kopf -->
+  <circle cx="200" cy="200" r="70" fill="#f2a154"/>
+  <!-- Helm -->
+  <circle cx="200" cy="200" r="78" fill="none" stroke="#dfe6ee" stroke-width="10"/>
+  <circle cx="200" cy="200" r="68" fill="#bcd4e6" opacity="0.35"/>
+  <!-- Augen -->
+  <ellipse cx="175" cy="200" rx="10" ry="14" fill="#1a1a2e"/>
+  <ellipse cx="225" cy="200" rx="10" ry="14" fill="#1a1a2e"/>
+  <circle cx="178" cy="195" r="3" fill="white"/>
+  <circle cx="228" cy="195" r="3" fill="white"/>
+  <!-- Nase -->
+  <polygon points="200,215 192,225 208,225" fill="#7a4a2b"/>
+  <!-- Schnurrhaare -->
+  <line x1="130" y1="215" x2="60" y2="205" stroke="#333" stroke-width="2"/>
+  <line x1="130" y1="225" x2="60" y2="230" stroke="#333" stroke-width="2"/>
+  <line x1="270" y1="215" x2="340" y2="205" stroke="#333" stroke-width="2"/>
+  <line x1="270" y1="225" x2="340" y2="230" stroke="#333" stroke-width="2"/>
+  <!-- Helm-Antenne -->
+  <line x1="200" y1="122" x2="200" y2="95" stroke="#dfe6ee" stroke-width="6"/>
+  <circle cx="200" cy="90" r="8" fill="#ff6b6b"/>
+</svg>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Container of Cats 🐱</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+      font-size: 2.5em;
+      margin-bottom: 5px;
+    }
+    p.subtitle {
+      color: #f0f0f0;
+      margin-bottom: 40px;
+      font-size: 1.1em;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      max-width: 1100px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      overflow: hidden;
+      width: 300px;
+      transition: transform 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    .card img {
+      width: 100%;
+      display: block;
+    }
+    .caption {
+      padding: 16px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+    }
+    footer {
+      margin-top: 50px;
+      color: #e0e0e0;
+      font-size: 0.9em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 Container of Cats 🐾</h1>
+  <p class="subtitle">Erfolgreich deployed via AWS Elastic Beanstalk</p>
+
+  <div class="gallery">
+    <div class="card">
+      <img src="images/cat1.svg" alt="Astronauten-Katze">
+      <div class="caption">Kater Neil Armstrong 🚀</div>
+    </div>
+    <div class="card">
+      <img src="images/cat2.svg" alt="Pizza-Katze">
+      <div class="caption">Miezi Margherita 🍕</div>
+    </div>
+    <div class="card">
+      <img src="images/cat3.svg" alt="Business-Katze">
+      <div class="caption">CEO Whiskers III 💼</div>
+    </div>
+  </div>
+
+  <footer>
+    Läuft auf: <span id="hostname">Elastic Beanstalk</span> &nbsp;|&nbsp; Cloud-Schulung 🎓
+  </footer>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Anleitung: Elastic Beanstalk mit Terraform provisionieren
+# Anleitung: Elastic Beanstalk mit Terraform erstellen
 
 **Dauer:** ca. 10–15 Minuten
 **Voraussetzung:** AWS-Zugangsdaten konfiguriert (siehe `Anleitung_Terraform_EC2.md`, Schritt 1–2)
@@ -7,15 +7,17 @@
 
 ## Worum geht's?
 
-Deployt das bestehende Docker-Image aus `Dockerrun.aws.json`
-(`ghcr.io/tdangschulz/meine-pipeline-app:main`) auf **Elastic Beanstalk** –
-das "Container-of-Cats"-Beispiel aus `container-of-cats-beanstalk.zip`,
-nur automatisiert per Terraform statt manuell über die Konsole hochgeladen.
+Bringt das Docker-Image aus `Dockerrun.aws.json`
+(`ghcr.io/tdangschulz/meine-pipeline-app:main`) automatisch online –
+über **Elastic Beanstalk**, den gleichen Dienst wie bei der
+"Container-of-Cats"-Übung (`container-of-cats-beanstalk.zip`), nur
+diesmal per Terraform statt manuell über die Konsole hochgeladen.
 
-Elastic Beanstalk übernimmt im Hintergrund automatisch: EC2-Instanz,
-Sicherheitsgruppen, Health-Checks, Rolling-Deployments bei neuen Versionen –
-guter Vergleichspunkt zu den EC2-Übungen: **eine Ebene höher als
-"nackte" EC2-Instanzen selbst verwalten.**
+Elastic Beanstalk kümmert sich im Hintergrund automatisch um: die
+EC2-Instanz, Sicherheitsregeln, Gesundheitschecks (ob die App noch
+läuft) und das Ausrollen neuer Versionen. Guter Vergleichspunkt zu den
+EC2-Übungen: eine Ebene bequemer, als eine EC2-Instanz komplett selbst
+zu verwalten.
 
 ---
 
@@ -34,9 +36,10 @@ terraform init
 terraform plan
 ```
 
-Zeigt: S3-Bucket, IAM-Rollen, Beanstalk-Application, -Version und
--Environment – alles mit sinnvollen Defaults, keine Parameter nötig
-(anders als bei der EC2-Übung, wo `key_name` Pflicht ist).
+Zeigt, was erstellt wird: ein S3-Bucket, Berechtigungen (IAM-Rollen),
+sowie die Beanstalk-Anwendung, -Version und -Umgebung – alles mit
+sinnvollen Standardwerten, ihr müsst nichts extra angeben (anders als
+bei der EC2-Übung, wo ihr den Key-Pair-Namen angeben müsst).
 
 ---
 
@@ -47,10 +50,10 @@ terraform apply
 ```
 
 Mit `yes` bestätigen. **Dauert deutlich länger als die reine
-EC2-Übung – ca. 5–10 Minuten**, da Beanstalk im Hintergrund eine
-komplette Umgebung (Instanz, Health-Monitoring, ...) aufbaut.
+EC2-Übung – ca. 5–10 Minuten**, weil Beanstalk im Hintergrund eine
+komplette Umgebung aufbaut (Instanz, Überwachung, …).
 
-Am Ende gibt Terraform `environment_url` aus.
+Am Ende zeigt Terraform `environment_url` an.
 
 ---
 
@@ -59,11 +62,12 @@ Am Ende gibt Terraform `environment_url` aus.
 `environment_url` aus den Outputs im Browser öffnen.
 
 > Hinweis: Auch nach "Apply complete" kann es noch 1–2 Minuten dauern,
-> bis der Container tatsächlich hochgefahren und die Health-Checks grün
-> sind – bei Fehlermeldung kurz warten und neu laden.
+> bis der Container tatsächlich läuft und alles grün ist – bei einer
+> Fehlermeldung also kurz warten und neu laden.
 
-Status jederzeit auch in der AWS-Konsole unter **Elastic Beanstalk →
-Environments** einsehbar (zeigt Health-Ampel: grün/gelb/rot).
+Der Status lässt sich auch jederzeit in der AWS-Konsole unter
+**Elastic Beanstalk → Environments** ansehen (zeigt eine Ampel:
+grün = läuft gut, gelb = Warnung, rot = Problem).
 
 ---
 
@@ -73,7 +77,7 @@ Environments** einsehbar (zeigt Health-Ampel: grün/gelb/rot).
 terraform destroy
 ```
 
-Mit `yes` bestätigen – löscht Environment, Application, IAM-Rollen und
+Mit `yes` bestätigen – löscht Umgebung, Anwendung, Berechtigungen und
 den S3-Bucket in der richtigen Reihenfolge.
 
 ---
@@ -82,21 +86,23 @@ den S3-Bucket in der richtigen Reihenfolge.
 
 | Problem | Lösung |
 |---|---|
-| **No valid credential sources found** | Siehe `Anleitung_Terraform_EC2.md` – Session ggf. via `eval "$(aws configure export-credentials --format env)"` erneuern |
-| **InvalidParameterValue: Unable to find solution stack** | Die automatisch gesuchte Docker-Plattform ("64bit Amazon Linux 2023 ... running Docker") wurde in der Region nicht gefunden – Region wechseln oder `name_regex` in `main.tf` anpassen |
-| **Environment-Status bleibt "Severe" / "Red"** | Meist zieht der Container das Image aus GHCR nicht – Image-Name in `Dockerrun.aws.json` prüfen, oder in der Beanstalk-Konsole unter "Logs" nachschauen |
-| **terraform destroy hängt beim S3-Bucket** | Bucket ist nicht leer (alte App-Versionen) – Terraform löscht das Objekt selbst mit, bei Problemen Objekt manuell in der S3-Konsole löschen und destroy erneut ausführen |
+| **No valid credential sources found** | Siehe `Anleitung_Terraform_EC2.md` – Zugangsdaten ggf. erneuern |
+| **InvalidParameterValue: Unable to find solution stack** | Die automatisch gesuchte Docker-Plattform wurde in der Region nicht gefunden – Region wechseln oder Trainer fragen |
+| **Umgebungsstatus bleibt "Severe" / "Red" (rot)** | Meist zieht der Container das Image nicht erfolgreich – Image-Name in `Dockerrun.aws.json` prüfen, oder in der Beanstalk-Konsole unter "Logs" nachschauen |
+| **terraform destroy hängt beim S3-Bucket** | Der Bucket ist nicht leer (alte App-Versionen liegen noch drin) – bei Problemen das Objekt manuell in der S3-Konsole löschen und destroy erneut ausführen |
 
 ---
 
 ## Zum Nachdenken
 
-- Vergleich zu `terraform-ec2-demo`: Dort baut ihr die Instanz + Webserver
-  komplett selbst; hier übernimmt Beanstalk das "Drumherum" (Load-Balancing,
-  Health-Checks, Deployment-Strategie) automatisch. Wann lohnt sich der
-  Mehraufwand von "nackten" EC2-Instanzen trotzdem?
-- `aws_elastic_beanstalk_application_version` bekommt einen Namen, der vom
-  Datei-Hash abhängt (`v-${etag}`). Was passiert, wenn ihr `Dockerrun.aws.json`
-  ändert und erneut `terraform apply` ausführt? (Antwort: neue Version wird
-  erstellt und automatisch als Rolling-Deployment ausgerollt – alte Version
-  bleibt in der Historie erhalten, guter Vergleich zu Docker-Image-Tags)
+- Vergleich zu `terraform-ec2-demo`: Dort baut ihr Instanz und
+  Webserver komplett selbst; hier übernimmt Beanstalk das
+  "Drumherum" automatisch (Lastverteilung, Gesundheitschecks,
+  Ausroll-Strategie). Wann lohnt sich der Mehraufwand einer "nackten"
+  EC2-Instanz trotzdem?
+- Jede neue Anwendungsversion bekommt einen eigenen Namen, abhängig
+  vom Datei-Inhalt. Was passiert, wenn ihr `Dockerrun.aws.json`
+  ändert und `terraform apply` erneut ausführt? (Antwort: es entsteht
+  automatisch eine neue Version, die ausgerollt wird – die alte
+  Version bleibt in der Historie erhalten, ähnlich wie bei
+  Docker-Image-Tags)
