@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Einfaches CloudFormation-Template: erstellt einen S3-Bucket mit aktiviertem
+  Static Website Hosting und öffentlichem Lesezugriff. Cloud-Schulung IaC-Übung.
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: >
+      Eindeutiger, global gültiger Name für den S3-Bucket
+      (z.B. cf-bucket-deinname-1234)
+
+Resources:
+
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      Tags:
+        - Key: Zweck
+          Value: CloudFormation-IaC-Uebung
+
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
+
+Outputs:
+  WebsiteURL:
+    Description: URL der statischen Website
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+  BucketName:
+    Description: Name des erstellten Buckets
+    Value: !Ref WebsiteBucket

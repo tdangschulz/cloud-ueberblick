@@ -1,0 +1,8 @@
+sudo yum install -y httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "<h1>Hallo aus der Golden-Image-Übung</h1>" | sudo tee /var/www/html/index.html
+
+sudo yum install -y mod_ssl
+sudo systemctl restart httpd
+curl -k https://localhost

@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Einfaches CloudFormation-Template: erstellt eine EC2-Instanz mit
+  Security Group und installiert automatisch einen Webserver per UserData.
+  Cloud-Schulung IaC-Übung (automatisierte Version der manuellen EC2-Übung).
+
+Parameters:
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: >
+      Vorhandenes EC2-Key-Pair für SSH-Zugriff (muss vorher in der EC2-Konsole
+      unter "Key Pairs" existieren)
+
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+    Description: EC2-Instanztyp (Free Tier: t2.micro / t3.micro)
+
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: >
+      Wird automatisch aufgelöst zur aktuellsten Amazon Linux 2023 AMI-ID
+      der jeweiligen Region – kein manuelles Nachschauen nötig
+
+Resources:
+
+  WebserverSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Erlaubt HTTP (80) und SSH (22)
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Zweck
+          Value: CloudFormation-IaC-Uebung
+
+  WebserverInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref LatestAmiId
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref WebserverSecurityGroup
+      Tags:
+        - Key: Name
+          Value: CloudFormation-Webserver
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+          echo "<h1>Hallo von CloudFormation! 🚀</h1><p>Diese EC2-Instanz wurde vollautomatisch per CloudFormation-Template erstellt.</p>" > /var/www/html/index.html
+
+Outputs:
+  PublicIP:
+    Description: Öffentliche IP-Adresse der Instanz
+    Value: !GetAtt WebserverInstance.PublicIp
+  WebsiteURL:
+    Description: URL der automatisch installierten Webseite
+    Value: !Sub 'http://${WebserverInstance.PublicIp}'
