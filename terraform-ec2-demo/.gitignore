@@ -1,0 +1,9 @@
+# Terraform-State enthält teils sensible Daten und ist maschinen-
+# spezifisch — gehört nicht ins Git-Repo (bei echten Projekten
+# nutzt man stattdessen ein Remote-Backend, z.B. S3 + DynamoDB).
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+crash.log

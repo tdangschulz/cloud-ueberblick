@@ -1,0 +1,20 @@
+# CloudFormation-Übung: nicht Teil der Anwendung, soll nicht ins Image
+*.zip
+*.md
+*.yaml
+*.yml
+Dockerrun.aws.json
+ec2.txt
+
+# Docker- und Git-Metadaten
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+# Node
+node_modules
+npm-debug.log
+
+# CI/CD
+.github
