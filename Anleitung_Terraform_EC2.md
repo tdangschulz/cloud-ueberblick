@@ -1,43 +1,46 @@
-# Anleitung: EC2-Webserver mit Terraform provisionieren
+# Anleitung: EC2-Webserver mit Terraform erstellen
 
 **Dauer:** ca. 10 Minuten
-**Voraussetzung:** AWS-Zugangsdaten (Access Key/Secret oder SSO), Terraform installiert (`terraform -version`)
+**Voraussetzung:** AWS-Zugangsdaten (Access Key/Secret oder SSO),
+Terraform installiert (mit `terraform -version` prüfbar)
 
 ---
 
 ## Worum geht's?
 
 Gleiches Ergebnis wie bei `cloudformation-ec2-webserver.yaml`, nur mit
-einem anderen IaC-Tool: Terraform beschreibt EC2-Instanz, Security Group
-und Webserver-Installation (**user_data**) deklarativ in `.tf`-Dateien
+einem anderen Werkzeug: Terraform beschreibt EC2-Instanz, Security
+Group und die Webserver-Installation (**user_data**) in `.tf`-Dateien
 im Ordner `terraform-ec2-demo/`.
 
-Guter Vergleichspunkt zur CloudFormation-Übung: **gleiches Konzept
-(deklarativ, wiederholbar, versionierbar), anderes Tool** – und
-Terraform funktioniert genauso mit Azure, GCP, etc., nicht nur AWS.
+Guter Vergleichspunkt zur CloudFormation-Übung: gleiches Prinzip
+(alles wird in einer Datei beschrieben und automatisch erstellt),
+nur ein anderes Werkzeug – und Terraform funktioniert genauso mit
+Azure, GCP usw., nicht nur mit AWS.
 
 ---
 
 ## Schritt 1: AWS-Zugangsdaten bereitstellen
 
-Terraform braucht Zugriff auf AWS – z. B. über die AWS CLI:
+Terraform braucht Zugriff auf euren AWS-Account, z. B. über die AWS CLI:
 
 ```bash
 aws configure
 ```
 
-(Access Key, Secret Key, Region eingeben – oder `AWS_ACCESS_KEY_ID` /
-`AWS_SECRET_ACCESS_KEY` als Umgebungsvariablen setzen.)
+(Fragt nach Access Key, Secret Key und Region – alternativ könnt ihr
+`AWS_ACCESS_KEY_ID` und `AWS_SECRET_ACCESS_KEY` als
+Umgebungsvariablen setzen.)
 
 ---
 
 ## Schritt 2: Key Pair sicherstellen
 
-Für SSH-Zugriff wird ein vorhandenes Key Pair benötigt (dasselbe wie
-bei der CloudFormation-Übung, falls schon vorhanden):
+Für den späteren Fernzugriff per SSH braucht ihr ein vorhandenes Key
+Pair (dasselbe wie bei der CloudFormation-Übung, falls schon vorhanden):
 
 1. In der EC2-Konsole unter **„Key Pairs"** prüfen
-2. Falls nicht vorhanden: **„Create key pair"** → Namen merken
+2. Falls keins vorhanden ist: **„Create key pair"** → Namen merken
 
 ---
 
@@ -48,8 +51,8 @@ cd terraform-ec2-demo
 terraform init
 ```
 
-Lädt den AWS-Provider herunter (entspricht in etwa dem "Hochladen des
-Templates" bei CloudFormation – nur einmal pro Ordner nötig).
+Lädt das nötige AWS-Plugin herunter (vergleichbar mit dem Hochladen
+des Templates bei CloudFormation – nur einmal pro Ordner nötig).
 
 ---
 
@@ -59,9 +62,8 @@ Templates" bei CloudFormation – nur einmal pro Ordner nötig).
 terraform plan -var="key_name=<dein-key-pair-name>"
 ```
 
-Zeigt genau, WAS erstellt werden würde, OHNE es wirklich zu tun –
-guter Diskussionspunkt: CloudFormation hat mit "Change Sets" ein
-ähnliches Konzept, ist aber bei Terraform Standard-Workflow.
+Zeigt genau, WAS erstellt werden würde, OHNE es wirklich zu tun – so
+könnt ihr vorher prüfen, ob alles stimmt.
 
 ---
 
@@ -73,8 +75,8 @@ terraform apply -var="key_name=<dein-key-pair-name>"
 
 Mit `yes` bestätigen. Dauert ca. 1–2 Minuten, bis die Instanz läuft.
 
-Am Ende gibt Terraform die **Outputs** aus (`public_ip`, `website_url`).
-Falls sie später nochmal gebraucht werden:
+Am Ende zeigt Terraform die **Outputs** an (`public_ip`,
+`website_url`). Falls ihr sie später nochmal braucht:
 
 ```bash
 terraform output
@@ -87,8 +89,8 @@ terraform output
 `website_url` aus den Outputs im Browser öffnen.
 
 > Hinweis: Der Webserver braucht nach "Apply complete" noch ein paar
-> Sekunden zusätzlich, bis das user_data-Skript fertig durchgelaufen
-> ist – bei "Connection refused" kurz warten und neu laden.
+> Sekunden zusätzlich, bis das Startskript fertig durchgelaufen ist.
+> Bei „Connection refused" also kurz warten und neu laden.
 
 ---
 
@@ -108,23 +110,25 @@ macht).
 
 | Problem | Lösung |
 |---|---|
-| **Error: No valid credential sources found** | `aws configure` noch nicht ausgeführt bzw. Zugangsdaten abgelaufen |
-| **InvalidKeyPair.NotFound** | `key_name` falsch geschrieben oder Key Pair existiert nicht in der gewählten Region |
-| **Error: creating EC2 Instance ... UnauthorizedOperation** | Account darf keine EC2-Instanzen erstellen – Trainer fragen |
-| **terraform.tfstate lokal "verloren"** | Ohne Remote-Backend liegt der State nur lokal – bei Teamarbeit unbedingt S3+DynamoDB-Backend nutzen |
+| **Error: No valid credential sources found** | `aws configure` wurde noch nicht ausgeführt, oder die Zugangsdaten sind abgelaufen |
+| **InvalidKeyPair.NotFound** | `key_name` falsch geschrieben, oder das Key Pair existiert nicht in der gewählten Region |
+| **Error: creating EC2 Instance ... UnauthorizedOperation** | Der Account darf keine EC2-Instanzen erstellen – Trainer fragen |
+| **terraform.tfstate lokal "verloren"** | Die Terraform-Statusdatei liegt nur lokal auf eurem Rechner – bei Teamarbeit besser einen zentralen Speicherort nutzen |
 
 ---
 
 ## Zum Nachdenken
 
-- Vergleich zu `cloudformation-ec2-webserver.yaml`: Gleiche Ressourcen,
-  gleiches `user_data`-Skript – was ist an der Terraform-Syntax anders,
-  was ist gleich geblieben?
-- Terraform speichert den aktuellen Zustand in `terraform.tfstate`.
-  Was passiert, wenn diese Datei gelöscht wird, die Instanz aber
-  weiterläuft? (Antwort: Terraform "vergisst" die Ressource und würde
-  bei erneutem `apply` versuchen, eine zweite zu erstellen – guter
-  Grund für Remote-State im Team)
-- Terraform ist Cloud-agnostisch, CloudFormation nicht. Wann würde man
-  trotzdem CloudFormation bevorzugen? (Antwort: reine AWS-Umgebung,
-  keine externe Abhängigkeit, native Integration mit anderen AWS-Diensten)
+- Vergleich zu `cloudformation-ec2-webserver.yaml`: Gleiche
+  Ressourcen, gleiches Startskript – was ist an der Terraform-Syntax
+  anders, was ist gleich geblieben?
+- Terraform speichert den aktuellen Zustand in einer Datei namens
+  `terraform.tfstate`. Was passiert, wenn diese Datei gelöscht wird,
+  die Instanz aber weiterläuft? (Antwort: Terraform "vergisst" die
+  Ressource und würde beim nächsten `apply` versuchen, eine zweite zu
+  erstellen – ein guter Grund, den Zustand im Team zentral zu
+  speichern)
+- Terraform funktioniert mit mehreren Cloud-Anbietern,
+  CloudFormation nur mit AWS. Wann würde man trotzdem CloudFormation
+  bevorzugen? (Antwort: wenn man nur AWS nutzt und keine zusätzliche
+  Abhängigkeit von einem externen Tool möchte)
