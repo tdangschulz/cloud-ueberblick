@@ -12,7 +12,7 @@ const app = require('./app');
 describe('GET /health', () => {
   it('antwortet mit Status 200 und Text "OK"', async () => {
     const res = await request(app).get('/health');
-    expect(res.status).toBe(205);
+    expect(res.status).toBe(200);
     expect(res.text).toBe('OK');
   });
 });
